@@ -7,7 +7,7 @@ PORT = 8000
 
 class KeyServer(BaseHTTPServer.BaseHTTPRequestHandler):
     def do_GET(self):
-        pass
+        print "got request for:", self.path
 
 httpd = SocketServer.ForkingTCPServer(('', PORT), KeyServer)
 print "serving at port", PORT
