@@ -12,7 +12,15 @@ class KeyServer(BaseHTTPServer.BaseHTTPRequestHandler):
 
     def do_GET(self):
         print "got request for:", self.path
-        print "found: ", self.get_value()
+        value = self.get_value()
+        print "found: ", value
+        if value == None:
+            self.send_response(404)
+        else:
+            self.send_response(200)
+            self.send_header("Status", "OK")
+            self.wfile.write(value)
+        self.end_headers()
 
     def do_POST(self):
         global dict
@@ -28,6 +36,7 @@ class KeyServer(BaseHTTPServer.BaseHTTPRequestHandler):
 
         # begin response
         self.send_response(200)
+        self.send_header("Status", "OK")
         self.end_headers()
 
         # parse values

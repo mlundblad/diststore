@@ -1,0 +1,9 @@
+import SimpleHttpServer
+
+class KeyServer
+
+PORT=8000
+
+class KeyServer(SimpleHTTPServer.SimpleHTTPRequestHandler):
+    def do_GET(self):
+        self.copyfile(urllib.urlopen(self.path), self.wfile)
