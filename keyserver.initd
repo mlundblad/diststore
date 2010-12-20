@@ -1,0 +1,56 @@
+#!/bin/sh
+# /etc/init.d/keyserver
+#
+
+set -e
+
+PREFIX=/usr/local
+NAME=keyserver
+DAEMON=$PREFIX/bin/$NAME
+
+# include defaults if available
+if [ -f /etc/default/$NAME ]; then
+   . /etc/default/$NAME
+fi
+
+if [ -z $PORT ]; then
+   echo "No port given. Using default"
+   PORT=8000
+fi
+
+if [ -z $DAEMON_USER ]; then
+   DAEMON_USER=nobody
+fi
+
+case "$1" in
+     start)
+	echo -n "Starting $NAME: "
+	start-stop-daemon --start --quiet --background --make-pidfile \
+			  --pidfile /var/run/$NAME.pid \
+			  --chuid $DAEMON_USER --exec $DAEMON -- $PORT
+	echo "$NAME."
+	;;
+     stop)
+	echo "Stopping $NAME: "
+	start-stop-daemon --stop --quiet --background \
+			  --pidfile /var/run/$NAME.pid --chuid $DAEMON_USER \
+			  --exec $DAEMON
+	echo "$NAME."
+	;;
+     restart)
+	echo "Restarting $NAME: "
+	start-stop-daemon --stop --quiet --background \
+			  --pidfile /var/run/$NAME.pid --chuid $DAEMON_USER \
+			  --exec $DAEMON
+	sleep 5
+	start-stop-daemon --start --quiet --background --make-pidfile \
+			  --pidfile /var/run/$NAME.pid \
+			  --chuid $DAEMON_USER --exec $DAEMON -- $PORT
+     *)
+	N=/etc/init.d/$NAME
+	echo "Usage: $N {start|stop|restart}" >&2
+	exit 1
+	;;
+esac
+
+exit 0
