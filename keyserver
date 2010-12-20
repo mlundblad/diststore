@@ -5,4 +5,4 @@ NAME=keyserver
 PREFIX=/usr/local
 SERVER_HOME=$PREFIX/share/pyshared/$NAME
 
-$PYTHON $SERVER_HOME/keyserver.py
+$PYTHON $SERVER_HOME/keyserver.py $@

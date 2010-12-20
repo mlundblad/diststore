@@ -3,6 +3,7 @@ import BaseHTTPServer
 import SocketServer
 import urllib
 import cgi
+import sys
 
 PORT = 8000
 dict = {}
@@ -52,8 +53,10 @@ class KeyServer(BaseHTTPServer.BaseHTTPRequestHandler):
 
     def get_value(self):
         return dict.get(self.path, None)
-        
 
-httpd = SocketServer.TCPServer(('', PORT), KeyServer)
+if len(sys.argv) == 2:
+    PORT = sys.argv[1]
+
+httpd = SocketServer.TCPServer(('', int(PORT)), KeyServer)
 print "serving at port", PORT
 httpd.serve_forever()
