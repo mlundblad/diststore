@@ -17,11 +17,12 @@ class KeyServer(BaseHTTPServer.BaseHTTPRequestHandler):
         print "found: ", value
         if value == None:
             self.send_response(404)
+            self.end_headers()
         else:
             self.send_response(200)
             self.send_header("Status", "OK")
+            self.end_headers()
             self.wfile.write(value)
-        self.end_headers()
 
     def do_POST(self):
         global dict
